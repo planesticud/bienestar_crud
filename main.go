@@ -1,10 +1,10 @@
 package main
 
 import (
-	_ "bienestar_crud/routers"
+	_ "github.com/planesticud/bienestar_crud/routers"
 
-	beego "github.com/beego/beego/v2/server/web"
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
 )
 

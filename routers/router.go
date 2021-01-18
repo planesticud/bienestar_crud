@@ -10,7 +10,7 @@ package routers
 import (
 	"github.com/planesticud/bienestar_crud/controllers"
 
-	beego "github.com/beego/beego/v2/server/web"
+	"github.com/astaxie/beego"
 )
 
 func init() {
@@ -22,87 +22,21 @@ func init() {
 			),
 		),
 
-		beego.NSNamespace("/tipo_antecedente",
-			beego.NSInclude(
-				&controllers.TipoAntecedenteController{},
-			),
-		),
-
-		beego.NSNamespace("/soporte_aval",
-			beego.NSInclude(
-				&controllers.SoporteAvalController{},
-			),
-		),
-
-		beego.NSNamespace("/hoja_historia",
-			beego.NSInclude(
-				&controllers.HojaHistoriaController{},
-			),
-		),
-
-		beego.NSNamespace("/remision",
-			beego.NSInclude(
-				&controllers.RemisionController{},
-			),
-		),
-
-		beego.NSNamespace("/signos_vitales",
-			beego.NSInclude(
-				&controllers.SignosVitalesController{},
-			),
-		),
-
-		beego.NSNamespace("/orden",
-			beego.NSInclude(
-				&controllers.OrdenController{},
-			),
-		),
-
-		beego.NSNamespace("/excusa_medica",
-			beego.NSInclude(
-				&controllers.ExcusaMedicaController{},
-			),
-		),
-
-		beego.NSNamespace("/motivo_aval",
-			beego.NSInclude(
-				&controllers.MotivoAvalController{},
-			),
-		),
-
-		beego.NSNamespace("/solicitud_servicio",
-			beego.NSInclude(
-				&controllers.SolicitudServicioController{},
-			),
-		),
-
-		beego.NSNamespace("/dato_solicitud",
-			beego.NSInclude(
-				&controllers.DatoSolicitudController{},
-			),
-		),
-
-		beego.NSNamespace("/acceso_historia",
-			beego.NSInclude(
-				&controllers.AccesoHistoriaController{},
-			),
-		),
-
-		beego.NSNamespace("/tipo_antecedente_psicologico",
-			beego.NSInclude(
-				&controllers.TipoAntecedentePsicologicoController{},
-			),
-		),
-
 		beego.NSNamespace("/diagnostico",
 			beego.NSInclude(
 				&controllers.DiagnosticoController{},
 			),
 		),
 
-		beego.NSNamespace("/valoracion_interpersonal",
+		beego.NSNamespace("/especialidad",
 			beego.NSInclude(
-				&controllers.ValoracionInterpersonalController{},
+				&controllers.EspecialidadController{},
+			),
+		),
+
+		beego.NSNamespace("/anamnesis",
+			beego.NSInclude(
+				&controllers.AnamnesisController{},
 			),
 		),
 
@@ -112,39 +46,15 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/asignacion_atencion_medica",
+			beego.NSInclude(
+				&controllers.AsignacionAtencionMedicaController{},
+			),
+		),
+
 		beego.NSNamespace("/comportamiento_consulta",
 			beego.NSInclude(
 				&controllers.ComportamientoConsultaController{},
-			),
-		),
-
-		beego.NSNamespace("/limites",
-			beego.NSInclude(
-				&controllers.LimitesController{},
-			),
-		),
-
-		beego.NSNamespace("/subtipo_servicio",
-			beego.NSInclude(
-				&controllers.SubtipoServicioController{},
-			),
-		),
-
-		beego.NSNamespace("/antecedente",
-			beego.NSInclude(
-				&controllers.AntecedenteController{},
-			),
-		),
-
-		beego.NSNamespace("/examen_dental",
-			beego.NSInclude(
-				&controllers.ExamenDentalController{},
-			),
-		),
-
-		beego.NSNamespace("/antecedente_psicologico",
-			beego.NSInclude(
-				&controllers.AntecedentePsicologicoController{},
 			),
 		),
 
@@ -160,45 +70,9 @@ func init() {
 			),
 		),
 
-		beego.NSNamespace("/tipo_atencion",
+		beego.NSNamespace("/examen_dental",
 			beego.NSInclude(
-				&controllers.TipoAtencionController{},
-			),
-		),
-
-		beego.NSNamespace("/tipo_servicio",
-			beego.NSInclude(
-				&controllers.TipoServicioController{},
-			),
-		),
-
-		beego.NSNamespace("/persona",
-			beego.NSInclude(
-				&controllers.PersonaController{},
-			),
-		),
-
-		beego.NSNamespace("/historia_clinica",
-			beego.NSInclude(
-				&controllers.HistoriaClinicaController{},
-			),
-		),
-
-		beego.NSNamespace("/anamnesis",
-			beego.NSInclude(
-				&controllers.AnamnesisController{},
-			),
-		),
-
-		beego.NSNamespace("/especialidad",
-			beego.NSInclude(
-				&controllers.EspecialidadController{},
-			),
-		),
-
-		beego.NSNamespace("/odontograma",
-			beego.NSInclude(
-				&controllers.OdontogramaController{},
+				&controllers.ExamenDentalController{},
 			),
 		),
 
@@ -208,15 +82,141 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/excusa_medica",
+			beego.NSInclude(
+				&controllers.ExcusaMedicaController{},
+			),
+		),
+
+		beego.NSNamespace("/limites",
+			beego.NSInclude(
+				&controllers.LimitesController{},
+			),
+		),
+
+		beego.NSNamespace("/odontograma",
+			beego.NSInclude(
+				&controllers.OdontogramaController{},
+			),
+		),
+
+		beego.NSNamespace("/orden",
+			beego.NSInclude(
+				&controllers.OrdenController{},
+			),
+		),
+
+		beego.NSNamespace("/remision",
+			beego.NSInclude(
+				&controllers.RemisionController{},
+			),
+		),
+
+		beego.NSNamespace("/signos_vitales",
+			beego.NSInclude(
+				&controllers.SignosVitalesController{},
+			),
+		),
+
+		beego.NSNamespace("/valoracion_interpersonal",
+			beego.NSInclude(
+				&controllers.ValoracionInterpersonalController{},
+			),
+		),
+
+		beego.NSNamespace("/motivo_aval",
+			beego.NSInclude(
+				&controllers.MotivoAvalController{},
+			),
+		),
+
+		beego.NSNamespace("/historia_clinica",
+			beego.NSInclude(
+				&controllers.HistoriaClinicaController{},
+			),
+		),
+
+		beego.NSNamespace("/acceso_historia",
+			beego.NSInclude(
+				&controllers.AccesoHistoriaController{},
+			),
+		),
+
+		beego.NSNamespace("/persona",
+			beego.NSInclude(
+				&controllers.PersonaController{},
+			),
+		),
+
+		beego.NSNamespace("/hoja_historia",
+			beego.NSInclude(
+				&controllers.HojaHistoriaController{},
+			),
+		),
+
 		beego.NSNamespace("/asignacion_solicitud",
 			beego.NSInclude(
 				&controllers.AsignacionSolicitudController{},
 			),
 		),
 
-		beego.NSNamespace("/asignacion_atencion_medica",
+		beego.NSNamespace("/soporte_aval",
 			beego.NSInclude(
-				&controllers.AsignacionAtencionMedicaController{},
+				&controllers.SoporteAvalController{},
+			),
+		),
+
+		beego.NSNamespace("/solicitud_servicio",
+			beego.NSInclude(
+				&controllers.SolicitudServicioController{},
+			),
+		),
+
+		beego.NSNamespace("/tipo_servicio",
+			beego.NSInclude(
+				&controllers.TipoServicioController{},
+			),
+		),
+
+		beego.NSNamespace("/subtipo_servicio",
+			beego.NSInclude(
+				&controllers.SubtipoServicioController{},
+			),
+		),
+
+		beego.NSNamespace("/tipo_antecedente",
+			beego.NSInclude(
+				&controllers.TipoAntecedenteController{},
+			),
+		),
+
+		beego.NSNamespace("/antecedente",
+			beego.NSInclude(
+				&controllers.AntecedenteController{},
+			),
+		),
+
+		beego.NSNamespace("/tipo_antecedente_psicologico",
+			beego.NSInclude(
+				&controllers.TipoAntecedentePsicologicoController{},
+			),
+		),
+
+		beego.NSNamespace("/antecedente_psicologico",
+			beego.NSInclude(
+				&controllers.AntecedentePsicologicoController{},
+			),
+		),
+
+		beego.NSNamespace("/tipo_atencion",
+			beego.NSInclude(
+				&controllers.TipoAtencionController{},
+			),
+		),
+
+		beego.NSNamespace("/dato_solicitud",
+			beego.NSInclude(
+				&controllers.DatoSolicitudController{},
 			),
 		),
 	)
