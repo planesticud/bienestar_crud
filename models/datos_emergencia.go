@@ -10,7 +10,7 @@ import (
 )
 
 type DatosEmergencia struct {
-	Id                int              `orm:"column(id);pk"`
+	Id                int              `orm:"column(id);pk;auto"`
 	Nombre            string           `orm:"column(nombre)"`
 	Parentesco        string           `orm:"column(parentesco)"`
 	Telefono          string           `orm:"column(telefono)"`

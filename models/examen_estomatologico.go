@@ -10,7 +10,7 @@ import (
 )
 
 type ExamenEstomatologico struct {
-	Id                   int           `orm:"column(id);pk"`
+	Id                   int           `orm:"column(id);pk;auto"`
 	HojaHistoriaId       *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
 	Observaciones        string        `orm:"column(observaciones)"`
 	ArticulacionTemporo  string        `orm:"column(articulacion_temporo)"`

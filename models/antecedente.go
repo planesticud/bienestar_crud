@@ -10,7 +10,7 @@ import (
 )
 
 type Antecedente struct {
-	Id                int              `orm:"column(id);pk"`
+	Id                int              `orm:"column(id);pk;auto"`
 	HistoriaClinicaId *HistoriaClinica `orm:"column(historia_clinica_id);rel(fk)"`
 	TipoAntecedenteId *TipoAntecedente `orm:"column(tipo_antecedente_id);rel(fk)"`
 	Observaciones     string           `orm:"column(observaciones)"`

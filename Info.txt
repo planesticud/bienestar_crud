@@ -1,0 +1,1 @@
+Signos vitales -> ver si afecta algo la consulta de los registros con string

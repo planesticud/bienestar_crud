@@ -10,7 +10,7 @@ import (
 )
 
 type HistoriaClinica struct {
-	Id        int      `orm:"column(id);pk"`
+	Id        int      `orm:"column(id);pk;auto"`
 	PersonaId *Persona `orm:"column(persona_id);rel(fk)"`
 }
 

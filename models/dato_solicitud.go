@@ -10,7 +10,7 @@ import (
 )
 
 type DatoSolicitud struct {
-	Id                  int                `orm:"column(id);pk"`
+	Id                  int                `orm:"column(id);pk;auto"`
 	SolicitudServicioId *SolicitudServicio `orm:"column(solicitud_servicio_id);rel(fk)"`
 	TipoAtencionId      *TipoAtencion      `orm:"column(tipo_atencion_id);rel(fk)"`
 	Observaciones       string             `orm:"column(observaciones)"`

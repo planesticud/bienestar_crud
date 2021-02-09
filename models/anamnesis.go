@@ -11,7 +11,7 @@ import (
 )
 
 type Anamnesis struct {
-	Id                     int              `orm:"column(id);pk"`
+	Id                     int              `orm:"column(id);pk;auto"`
 	HistoriaClinicaId      *HistoriaClinica `orm:"column(historia_clinica_id);rel(fk)"`
 	Tratamiento            string           `orm:"column(tratamiento)"`
 	Medicamentos           string           `orm:"column(medicamentos)"`

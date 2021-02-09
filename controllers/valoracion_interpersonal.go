@@ -2,12 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
-	"github.com/planesticud/bienestar_crud/models"
 	"strconv"
 	"strings"
 
+	"github.com/planesticud/bienestar_crud/models"
+
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 // ValoracionInterpersonalController operations for ValoracionInterpersonal
@@ -29,7 +30,7 @@ func (c *ValoracionInterpersonalController) URLMapping() {
 // @Description create ValoracionInterpersonal
 // @Param	body		body 	models.ValoracionInterpersonal	true		"body for ValoracionInterpersonal content"
 // @Success 201 {int} models.ValoracionInterpersonal
-// @Failure 403 body is empty
+// @Failure 400 the request contains incorrect syntax
 // @router / [post]
 func (c *ValoracionInterpersonalController) Post() {
 	var v models.ValoracionInterpersonal
@@ -39,9 +40,17 @@ func (c *ValoracionInterpersonalController) Post() {
 			c.Data["json"] = v
 		} else {
 			c.Data["json"] = err.Error()
+			logs.Error(err)
+			//c.Data["development"] = map[string]interface{}{"Code": "400", "Body": err.Error(), "Type": "error"}
+			c.Data["system"] = err
+			c.Abort("400")
 		}
 	} else {
 		c.Data["json"] = err.Error()
+		logs.Error(err)
+		//c.Data["development"] = map[string]interface{}{"Code": "400", "Body": err.Error(), "Type": "error"}
+		c.Data["system"] = err
+		c.Abort("400")
 	}
 	c.ServeJSON()
 }
@@ -51,7 +60,7 @@ func (c *ValoracionInterpersonalController) Post() {
 // @Description get ValoracionInterpersonal by id
 // @Param	id		path 	string	true		"The key for staticblock"
 // @Success 200 {object} models.ValoracionInterpersonal
-// @Failure 403 :id is empty
+// @Failure 404 not found resource
 // @router /:id [get]
 func (c *ValoracionInterpersonalController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
@@ -59,6 +68,10 @@ func (c *ValoracionInterpersonalController) GetOne() {
 	v, err := models.GetValoracionInterpersonalById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		logs.Error(err)
+		//c.Data["development"] = map[string]interface{}{"Code": "404", "Body": err.Error(), "Type": "error"}
+		c.Data["system"] = err
+		c.Abort("404")
 	} else {
 		c.Data["json"] = v
 	}
@@ -75,7 +88,7 @@ func (c *ValoracionInterpersonalController) GetOne() {
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.ValoracionInterpersonal
-// @Failure 403
+// @Failure 404 not found resource
 // @router / [get]
 func (c *ValoracionInterpersonalController) GetAll() {
 	var fields []string
@@ -110,7 +123,8 @@ func (c *ValoracionInterpersonalController) GetAll() {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
 			if len(kv) != 2 {
-				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				//c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.Data["json"] = models.Alert{Type: "error", Code: "E_400", Body: "Error: invalid query key/value pair"}
 				c.ServeJSON()
 				return
 			}
@@ -122,7 +136,14 @@ func (c *ValoracionInterpersonalController) GetAll() {
 	l, err := models.GetAllValoracionInterpersonal(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		logs.Error(err)
+		//c.Data["development"] = map[string]interface{}{"Code": "404", "Body": err.Error(), "Type": "error"}
+		c.Data["system"] = err
+		c.Abort("404")
 	} else {
+		if l == nil {
+			l = append(l, map[string]interface{}{})
+		}
 		c.Data["json"] = l
 	}
 	c.ServeJSON()
@@ -134,7 +155,7 @@ func (c *ValoracionInterpersonalController) GetAll() {
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.ValoracionInterpersonal	true		"body for ValoracionInterpersonal content"
 // @Success 200 {object} models.ValoracionInterpersonal
-// @Failure 403 :id is not int
+// @Failure 400 the request contains incorrect syntax
 // @router /:id [put]
 func (c *ValoracionInterpersonalController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
@@ -143,11 +164,21 @@ func (c *ValoracionInterpersonalController) Put() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateValoracionInterpersonalById(&v); err == nil {
 			c.Data["json"] = "OK"
+			c.Ctx.Output.SetStatus(200)
+			c.Data["json"] = v
 		} else {
 			c.Data["json"] = err.Error()
+			logs.Error(err)
+			//c.Data["development"] = map[string]interface{}{"Code": "400", "Body": err.Error(), "Type": "error"}
+			c.Data["System"] = err
+			c.Abort("400")
 		}
 	} else {
 		c.Data["json"] = err.Error()
+		logs.Error(err)
+		//c.Data["development"] = map[string]interface{}{"Code": "400", "Body": err.Error(), "Type": "error"}
+		c.Data["System"] = err
+		c.Abort("400")
 	}
 	c.ServeJSON()
 }
@@ -157,15 +188,19 @@ func (c *ValoracionInterpersonalController) Put() {
 // @Description delete the ValoracionInterpersonal
 // @Param	id		path 	string	true		"The id you want to delete"
 // @Success 200 {string} delete success!
-// @Failure 403 id is empty
+// @Failure 404 not found resource
 // @router /:id [delete]
 func (c *ValoracionInterpersonalController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	if err := models.DeleteValoracionInterpersonal(id); err == nil {
-		c.Data["json"] = "OK"
+		c.Data["json"] = map[string]interface{}{"Id": id}
 	} else {
 		c.Data["json"] = err.Error()
+		logs.Error(err)
+		//c.Data["development"] = map[string]interface{}{"Code": "404", "Body": err.Error(), "Type": "error"}
+		c.Data["System"] = err
+		c.Abort("404")
 	}
 	c.ServeJSON()
 }

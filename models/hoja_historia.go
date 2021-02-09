@@ -11,7 +11,7 @@ import (
 )
 
 type HojaHistoria struct {
-	Id                   int              `orm:"column(id);pk"`
+	Id                   int              `orm:"column(id);pk;auto"`
 	HistoriaClinicaId    *HistoriaClinica `orm:"column(historia_clinica_id);rel(fk)"`
 	FechaConsulta        time.Time        `orm:"column(fecha_consulta);type(timestamp with time zone)"`
 	Motivo               string           `orm:"column(motivo)"`

@@ -11,7 +11,7 @@ import (
 )
 
 type Persona struct {
-	Id                   int       `orm:"column(id);pk"`
+	Id                   int       `orm:"column(id);pk;auto"`
 	PrimerNombre         string    `orm:"column(primer_nombre)"`
 	SegundoNombre        string    `orm:"column(segundo_nombre);null"`
 	PrimerApellido       string    `orm:"column(primer_apellido)"`

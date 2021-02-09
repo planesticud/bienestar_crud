@@ -10,7 +10,7 @@ import (
 )
 
 type SoporteAval struct {
-	Id                  int                `orm:"column(id);pk"`
+	Id                  int                `orm:"column(id);pk;auto"`
 	SolicitudServicioId *SolicitudServicio `orm:"column(solicitud_servicio_id);rel(fk)"`
 	DocumentoId         int                `orm:"column(documento_id)"`
 	MotivoAvalId        *MotivoAval        `orm:"column(motivo_aval_id);rel(fk)"`

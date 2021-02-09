@@ -11,7 +11,7 @@ import (
 )
 
 type AccesoHistoria struct {
-	Id                int              `orm:"column(id);pk"`
+	Id                int              `orm:"column(id);pk;auto"`
 	HistoriaClinicaId *HistoriaClinica `orm:"column(historia_clinica_id);rel(fk)"`
 	ProfesionalId     *Persona         `orm:"column(profesional_id);rel(fk)"`
 	FechaAcceso       time.Time        `orm:"column(fecha_acceso);type(timestamp with time zone)"`

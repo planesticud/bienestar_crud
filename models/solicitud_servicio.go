@@ -11,7 +11,7 @@ import (
 )
 
 type SolicitudServicio struct {
-	Id                    int              `orm:"column(id);pk"`
+	Id                    int              `orm:"column(id);pk;auto"`
 	PersonaId             *Persona         `orm:"column(persona_id);rel(fk)"`
 	SubtipoServicioId     *SubtipoServicio `orm:"column(subtipo_servicio_id);rel(fk)"`
 	FechaSolicitud        time.Time        `orm:"column(fecha_solicitud);type(timestamp with time zone)"`

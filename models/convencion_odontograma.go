@@ -5,21 +5,21 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type ConvencionOdontograma struct {
-	Id                int       `orm:"column(id);pk"`
-	Nombre            string    `orm:"column(nombre)"`
-	Descripcion       string    `orm:"column(descripcion);null"`
-	CodigoAbreviacion string    `orm:"column(codigo_abreviacion);null"`
-	NumeroOrden       float64   `orm:"column(numero_orden);null"`
-	Activo            bool      `orm:"column(activo)"`
-	Imagen            string    `orm:"column(imagen)"`
-	FechaCreacion     time.Time `orm:"column(fecha_creacion);type(timestamp with time zone)"`
-	FechaModificacion time.Time `orm:"column(fecha_modificacion);type(timestamp with time zone)"`
+	Id                int     `orm:"column(id);pk;auto"`
+	Nombre            string  `orm:"column(nombre)"`
+	Descripcion       string  `orm:"column(descripcion);null"`
+	CodigoAbreviacion string  `orm:"column(codigo_abreviacion);null"`
+	NumeroOrden       float64 `orm:"column(numero_orden);null"`
+	Activo            bool    `orm:"column(activo)"`
+	Imagen            string  `orm:"column(imagen)"`
+	FechaCreacion     string  `orm:"column(fecha_creacion);null"`
+	FechaModificacion string  `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *ConvencionOdontograma) TableName() string {
@@ -33,6 +33,8 @@ func init() {
 // AddConvencionOdontograma insert a new ConvencionOdontograma into database and returns
 // last inserted Id on success.
 func AddConvencionOdontograma(m *ConvencionOdontograma) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -132,6 +134,7 @@ func GetAllConvencionOdontograma(query map[string]string, fields []string, sortb
 func UpdateConvencionOdontogramaById(m *ConvencionOdontograma) (err error) {
 	o := orm.NewOrm()
 	v := ConvencionOdontograma{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64

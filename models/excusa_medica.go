@@ -11,7 +11,7 @@ import (
 )
 
 type ExcusaMedica struct {
-	Id             int           `orm:"column(id);pk"`
+	Id             int           `orm:"column(id);pk;auto"`
 	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
 	FechaGenerado  time.Time     `orm:"column(fecha_generado);type(timestamp with time zone)"`
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type ValoracionInterpersonal struct {
-	Id             int           `orm:"column(id);pk"`
+	Id             int           `orm:"column(id);pk;auto"`
 	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
 	Autoridad      string        `orm:"column(autoridad)"`
 	Pares          string        `orm:"column(pares)"`
