@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type ExamenEstomatologico struct {
@@ -26,6 +27,8 @@ type ExamenEstomatologico struct {
 	SistemaNervioso      string        `orm:"column(sistema_nervioso)"`
 	SistemaVascular      string        `orm:"column(sistema_vascular)"`
 	SistemaLinfatico     string        `orm:"column(sistema_linfatico)"`
+	FechaCreacion     	 string  			 `orm:"column(fecha_creacion);null"`
+	FechaModificacion 	 string  			 `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *ExamenEstomatologico) TableName() string {
@@ -39,6 +42,8 @@ func init() {
 // AddExamenEstomatologico insert a new ExamenEstomatologico into database and returns
 // last inserted Id on success.
 func AddExamenEstomatologico(m *ExamenEstomatologico) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -138,10 +143,11 @@ func GetAllExamenEstomatologico(query map[string]string, fields []string, sortby
 func UpdateExamenEstomatologicoById(m *ExamenEstomatologico) (err error) {
 	o := orm.NewOrm()
 	v := ExamenEstomatologico{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "Observaciones", "ArticulacionTemporo", "Labios", "Lengua", "Paladar", "PisoBoca", "Carrillos", "GlandulasSalivares", "Maxilares", "SenosMaxilares", "MusculosMasticadores", "SistemaNervioso", "SistemaVascular", "SistemaLinfatico", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

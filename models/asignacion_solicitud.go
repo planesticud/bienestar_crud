@@ -8,17 +8,20 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type AsignacionSolicitud struct {
 	Id                  int                `orm:"column(id);pk;auto"`
 	SolicitudServicioId *SolicitudServicio `orm:"column(solicitud_servicio_id);rel(fk)"`
 	FechaAsignacion     time.Time          `orm:"column(fecha_asignacion);type(timestamp with time zone)"`
-	AsesorId            *Persona           `orm:"column(asesor_id);rel(fk)"`
+	AsesorId            int                `orm:"column(asesor_id)"`
 	PeriodoId           int                `orm:"column(periodo_id)"`
 	FechaInicioAtencion time.Time          `orm:"column(fecha_inicio_atencion);type(timestamp with time zone)"`
 	FechaFinAtencion    time.Time          `orm:"column(fecha_fin_atencion);type(timestamp with time zone)"`
 	Observaciones       string             `orm:"column(observaciones)"`
+	FechaCreacion       string             `orm:"column(fecha_creacion);null"`
+	FechaModificacion   string             `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *AsignacionSolicitud) TableName() string {
@@ -32,6 +35,8 @@ func init() {
 // AddAsignacionSolicitud insert a new AsignacionSolicitud into database and returns
 // last inserted Id on success.
 func AddAsignacionSolicitud(m *AsignacionSolicitud) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -131,10 +136,11 @@ func GetAllAsignacionSolicitud(query map[string]string, fields []string, sortby 
 func UpdateAsignacionSolicitudById(m *AsignacionSolicitud) (err error) {
 	o := orm.NewOrm()
 	v := AsignacionSolicitud{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "SolicitudServicioId", "FechaAsignacion", "AsesorId", "PeriodoId", "FechaInicioAtencion", "FechaFinAtencion", "Observaciones", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

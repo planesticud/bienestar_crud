@@ -7,14 +7,17 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type Limites struct {
-	Id             int           `orm:"column(id);pk;auto"`
-	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
-	Difusos        string        `orm:"column(difusos)"`
-	Claros         string        `orm:"column(claros)"`
-	Rigidos        string        `orm:"column(rigidos)"`
+	Id                int           `orm:"column(id);pk;auto"`
+	HojaHistoriaId    *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
+	Difusos           string        `orm:"column(difusos)"`
+	Claros            string        `orm:"column(claros)"`
+	Rigidos           string        `orm:"column(rigidos)"`
+	FechaCreacion     string  			`orm:"column(fecha_creacion);null"`
+	FechaModificacion string  			`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *Limites) TableName() string {
@@ -28,6 +31,8 @@ func init() {
 // AddLimites insert a new Limites into database and returns
 // last inserted Id on success.
 func AddLimites(m *Limites) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -127,10 +132,11 @@ func GetAllLimites(query map[string]string, fields []string, sortby []string, or
 func UpdateLimitesById(m *Limites) (err error) {
 	o := orm.NewOrm()
 	v := Limites{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "Difusos", "Claros", "Rigidos", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

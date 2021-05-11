@@ -17,8 +17,8 @@ type SubtipoServicio struct {
 	CodigoAbreviacion string        `orm:"column(codigo_abreviacion);null"`
 	NumeroOrden       float64       `orm:"column(numero_orden);null"`
 	Activo            bool          `orm:"column(activo)"`
-	FechaCreacion     string        `orm:"column(fecha_creacion);null"`
-	FechaModificacion string        `orm:"column(fecha_modificacion);null"`
+	FechaCreacion     string  			`orm:"column(fecha_creacion);null"`
+	FechaModificacion string  			`orm:"column(fecha_modificacion);null"`
 	TipoServicioId    *TipoServicio `orm:"column(tipo_servicio_id);rel(fk)"`
 }
 
@@ -138,7 +138,7 @@ func UpdateSubtipoServicioById(m *SubtipoServicio) (err error) {
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "Nombre", "Descripcion", "CodigoAbreviacion", "Activo", "NumeroOrden", "TipoServicioId", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

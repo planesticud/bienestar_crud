@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type DatoSolicitud struct {
@@ -14,7 +15,9 @@ type DatoSolicitud struct {
 	SolicitudServicioId *SolicitudServicio `orm:"column(solicitud_servicio_id);rel(fk)"`
 	TipoAtencionId      *TipoAtencion      `orm:"column(tipo_atencion_id);rel(fk)"`
 	Observaciones       string             `orm:"column(observaciones)"`
-	AsesorPreferenciaId *Persona           `orm:"column(asesor_preferencia_id);rel(fk)"`
+	AsesorPreferenciaId int                `orm:"column(asesor_preferencia_id)"`
+	FechaCreacion     	string  					 `orm:"column(fecha_creacion);null"`
+	FechaModificacion 	string  					 `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *DatoSolicitud) TableName() string {
@@ -28,6 +31,8 @@ func init() {
 // AddDatoSolicitud insert a new DatoSolicitud into database and returns
 // last inserted Id on success.
 func AddDatoSolicitud(m *DatoSolicitud) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -127,10 +132,11 @@ func GetAllDatoSolicitud(query map[string]string, fields []string, sortby []stri
 func UpdateDatoSolicitudById(m *DatoSolicitud) (err error) {
 	o := orm.NewOrm()
 	v := DatoSolicitud{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "SolicitudServicioId", "TipoAtencionId", "Observaciones", "AsesorPreferenciaId", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

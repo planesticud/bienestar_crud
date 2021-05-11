@@ -22,6 +22,12 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/persona",
+			beego.NSInclude(
+				&controllers.PersonaController{},
+			),
+		),
+
 		beego.NSNamespace("/diagnostico",
 			beego.NSInclude(
 				&controllers.DiagnosticoController{},
@@ -34,6 +40,12 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/acceso_historia",
+			beego.NSInclude(
+				&controllers.AccesoHistoriaController{},
+			),
+		),
+
 		beego.NSNamespace("/anamnesis",
 			beego.NSInclude(
 				&controllers.AnamnesisController{},
@@ -43,6 +55,12 @@ func init() {
 		beego.NSNamespace("/datos_emergencia",
 			beego.NSInclude(
 				&controllers.DatosEmergenciaController{},
+			),
+		),
+
+		beego.NSNamespace("/historia_clinica",
+			beego.NSInclude(
+				&controllers.HistoriaClinicaController{},
 			),
 		),
 
@@ -118,6 +136,12 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/hoja_historia",
+			beego.NSInclude(
+				&controllers.HojaHistoriaController{},
+			),
+		),
+
 		beego.NSNamespace("/valoracion_interpersonal",
 			beego.NSInclude(
 				&controllers.ValoracionInterpersonalController{},
@@ -127,30 +151,6 @@ func init() {
 		beego.NSNamespace("/motivo_aval",
 			beego.NSInclude(
 				&controllers.MotivoAvalController{},
-			),
-		),
-
-		beego.NSNamespace("/historia_clinica",
-			beego.NSInclude(
-				&controllers.HistoriaClinicaController{},
-			),
-		),
-
-		beego.NSNamespace("/acceso_historia",
-			beego.NSInclude(
-				&controllers.AccesoHistoriaController{},
-			),
-		),
-
-		beego.NSNamespace("/persona",
-			beego.NSInclude(
-				&controllers.PersonaController{},
-			),
-		),
-
-		beego.NSNamespace("/hoja_historia",
-			beego.NSInclude(
-				&controllers.HojaHistoriaController{},
 			),
 		),
 

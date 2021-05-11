@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type HojaHistoria struct {
@@ -19,8 +20,10 @@ type HojaHistoria struct {
 	Observacion          string           `orm:"column(observacion)"`
 	Evolucion            string           `orm:"column(evolucion)"`
 	EspecialidadId       *Especialidad    `orm:"column(especialidad_id);rel(fk)"`
-	ProfesionalId        *Persona         `orm:"column(profesional_id);rel(fk)"`
+	ProfesionalId        int              `orm:"column(profesional_id)"`
 	DatosPersonaConsulta string           `orm:"column(datos_persona_consulta);type(json)"`
+	FechaCreacion     	 string  					`orm:"column(fecha_creacion);null"`
+	FechaModificacion		 string  					`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *HojaHistoria) TableName() string {
@@ -34,6 +37,8 @@ func init() {
 // AddHojaHistoria insert a new HojaHistoria into database and returns
 // last inserted Id on success.
 func AddHojaHistoria(m *HojaHistoria) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -133,10 +138,11 @@ func GetAllHojaHistoria(query map[string]string, fields []string, sortby []strin
 func UpdateHojaHistoriaById(m *HojaHistoria) (err error) {
 	o := orm.NewOrm()
 	v := HojaHistoria{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HistoriaClinicaId", "FechaConsulta", "Motivo", "DiagnosticoId", "Observacion", "Evolucion", "EspecialidadId", "ProfesionalId", "DatosPersonaConsulta", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

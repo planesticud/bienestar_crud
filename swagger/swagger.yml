@@ -1215,8 +1215,8 @@ paths:
       responses:
         "201":
           description: '{int} models.DatoSolicitud'
-        "400":
-          description: the request contains incorrect syntax
+        "403":
+          description: body is empty
   /dato_solicitud/{id}:
     get:
       tags:
@@ -3929,13 +3929,18 @@ definitions:
       FechaAcceso:
         type: string
         format: datetime
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HistoriaClinicaId:
         $ref: '#/definitions/models.HistoriaClinica'
       Id:
         type: integer
         format: int64
       ProfesionalId:
-        $ref: '#/definitions/models.Persona'
+        type: integer
+        format: int64
   models.Anamnesis:
     title: Anamnesis
     type: object
@@ -3950,20 +3955,24 @@ definitions:
         type: integer
         format: int64
       Chicle:
-        type: string
+        type: boolean
       Diabetes:
         type: string
       Dulces:
-        type: string
+        type: boolean
       EnfermedadRespiratoria:
         type: string
       Enjuague:
         type: integer
         format: int64
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       FiebreReumatica:
         type: string
       Fuma:
-        type: string
+        type: boolean
       Hemorragias:
         type: string
       Hepatitis:
@@ -3995,6 +4004,10 @@ definitions:
     title: Antecedente
     type: object
     properties:
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HistoriaClinicaId:
         $ref: '#/definitions/models.HistoriaClinica'
       Id:
@@ -4009,6 +4022,10 @@ definitions:
     type: object
     properties:
       ActualSomatico:
+        type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
         type: string
       HistoriaClinicaId:
         $ref: '#/definitions/models.HistoriaClinica'
@@ -4025,8 +4042,13 @@ definitions:
     properties:
       AsignacionSolicitudId:
         $ref: '#/definitions/models.AsignacionSolicitud'
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
-        $ref: '#/definitions/models.HojaHistoria'
+        type: integer
+        format: int64
       Id:
         type: integer
         format: int64
@@ -4035,16 +4057,21 @@ definitions:
     type: object
     properties:
       AsesorId:
-        $ref: '#/definitions/models.Persona'
+        type: integer
+        format: int64
       FechaAsignacion:
         type: string
         format: datetime
+      FechaCreacion:
+        type: string
       FechaFinAtencion:
         type: string
         format: datetime
       FechaInicioAtencion:
         type: string
         format: datetime
+      FechaModificacion:
+        type: string
       Id:
         type: integer
         format: int64
@@ -4063,6 +4090,10 @@ definitions:
         type: string
       Comportamiento:
         type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4074,6 +4105,10 @@ definitions:
     title: ComposicionFamiliar
     type: object
     properties:
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4085,6 +4120,12 @@ definitions:
     title: ControlPlaca
     type: object
     properties:
+      Diagrama:
+        type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4097,8 +4138,6 @@ definitions:
         type: integer
         format: int64
       Observaciones:
-        type: string
-      Vestibulares:
         type: string
   models.ConvencionOdontograma:
     title: ConvencionOdontograma
@@ -4129,7 +4168,12 @@ definitions:
     type: object
     properties:
       AsesorPreferenciaId:
-        $ref: '#/definitions/models.Persona'
+        type: integer
+        format: int64
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       Id:
         type: integer
         format: int64
@@ -4144,6 +4188,10 @@ definitions:
     type: object
     properties:
       Direccion:
+        type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
         type: string
       HistoriaClinicaId:
         $ref: '#/definitions/models.HistoriaClinica'
@@ -4208,6 +4256,10 @@ definitions:
     properties:
       Abrasion:
         type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4236,6 +4288,10 @@ definitions:
       ArticulacionTemporo:
         type: string
       Carrillos:
+        type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
         type: string
       GlandulasSalivares:
         type: string
@@ -4270,9 +4326,13 @@ definitions:
     title: ExcusaMedica
     type: object
     properties:
+      FechaCreacion:
+        type: string
       FechaGenerado:
         type: string
         format: datetime
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4282,11 +4342,16 @@ definitions:
     title: HistoriaClinica
     type: object
     properties:
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       Id:
         type: integer
         format: int64
       PersonaId:
-        $ref: '#/definitions/models.Persona'
+        type: integer
+        format: int64
   models.HojaHistoria:
     title: HojaHistoria
     type: object
@@ -4302,6 +4367,10 @@ definitions:
       FechaConsulta:
         type: string
         format: datetime
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HistoriaClinicaId:
         $ref: '#/definitions/models.HistoriaClinica'
       Id:
@@ -4312,7 +4381,8 @@ definitions:
       Observacion:
         type: string
       ProfesionalId:
-        $ref: '#/definitions/models.Persona'
+        type: integer
+        format: int64
   models.Limites:
     title: Limites
     type: object
@@ -4320,6 +4390,10 @@ definitions:
       Claros:
         type: string
       Difusos:
+        type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
         type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
@@ -4356,6 +4430,10 @@ definitions:
     properties:
       Diagrama:
         type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4367,6 +4445,10 @@ definitions:
     title: Orden
     type: object
     properties:
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4422,6 +4504,10 @@ definitions:
     properties:
       EspecialidadId:
         $ref: '#/definitions/models.Especialidad'
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4434,28 +4520,47 @@ definitions:
     type: object
     properties:
       Estatura:
+        type: number
+        format: double
+      FechaCreacion:
+        type: string
+      FechaModificacion:
         type: string
       FrecuenciaCardiaca:
-        type: string
+        type: integer
+        format: int64
       FrecuenciaRespiratoria:
-        type: string
+        type: integer
+        format: int64
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
         type: integer
         format: int64
       Imc:
-        type: string
+        type: number
+        format: double
       PerimetroAbdominal:
-        type: string
+        type: number
+        format: double
       Peso:
-        type: string
+        type: number
+        format: double
       Saturacion:
-        type: string
+        type: integer
+        format: int64
       Temperatura:
-        type: string
-      Tension:
-        type: string
+        type: number
+        format: double
+      TensionDiastolica:
+        type: integer
+        format: int64
+      TensionMedia:
+        type: number
+        format: double
+      TensionSistolica:
+        type: integer
+        format: int64
   models.SolicitudServicio:
     title: SolicitudServicio
     type: object
@@ -4464,6 +4569,10 @@ definitions:
         type: boolean
       DatosPersonaSolicitud:
         type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       FechaSolicitud:
         type: string
         format: datetime
@@ -4471,7 +4580,8 @@ definitions:
         type: integer
         format: int64
       PersonaId:
-        $ref: '#/definitions/models.Persona'
+        type: integer
+        format: int64
       SubtipoServicioId:
         $ref: '#/definitions/models.SubtipoServicio'
   models.SoporteAval:
@@ -4481,6 +4591,10 @@ definitions:
       DocumentoId:
         type: integer
         format: int64
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       Id:
         type: integer
         format: int64
@@ -4610,6 +4724,10 @@ definitions:
         type: string
       Economicos:
         type: string
+      FechaCreacion:
+        type: string
+      FechaModificacion:
+        type: string
       HojaHistoriaId:
         $ref: '#/definitions/models.HojaHistoria'
       Id:
@@ -4633,18 +4751,27 @@ tags:
 - name: convencion_odontograma
   description: |
     ConvencionOdontogramaController operations for ConvencionOdontograma
+- name: persona
+  description: |
+    PersonaController operations for Persona
 - name: diagnostico
   description: |
     DiagnosticoController operations for Diagnostico
 - name: especialidad
   description: |
     EspecialidadController operations for Especialidad
+- name: acceso_historia
+  description: |
+    AccesoHistoriaController operations for AccesoHistoria
 - name: anamnesis
   description: |
     AnamnesisController operations for Anamnesis
 - name: datos_emergencia
   description: |
     DatosEmergenciaController operations for DatosEmergencia
+- name: historia_clinica
+  description: |
+    HistoriaClinicaController operations for HistoriaClinica
 - name: asignacion_atencion_medica
   description: |
     AsignacionAtencionMedicaController operations for AsignacionAtencionMedica
@@ -4681,24 +4808,15 @@ tags:
 - name: signos_vitales
   description: |
     SignosVitalesController operations for SignosVitales
+- name: hoja_historia
+  description: |
+    HojaHistoriaController operations for HojaHistoria
 - name: valoracion_interpersonal
   description: |
     ValoracionInterpersonalController operations for ValoracionInterpersonal
 - name: motivo_aval
   description: |
     MotivoAvalController operations for MotivoAval
-- name: historia_clinica
-  description: |
-    HistoriaClinicaController operations for HistoriaClinica
-- name: acceso_historia
-  description: |
-    AccesoHistoriaController operations for AccesoHistoria
-- name: persona
-  description: |
-    PersonaController operations for Persona
-- name: hoja_historia
-  description: |
-    HojaHistoriaController operations for HojaHistoria
 - name: asignacion_solicitud
   description: |
     AsignacionSolicitudController operations for AsignacionSolicitud

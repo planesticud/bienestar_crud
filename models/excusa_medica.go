@@ -8,12 +8,15 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type ExcusaMedica struct {
-	Id             int           `orm:"column(id);pk;auto"`
-	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
-	FechaGenerado  time.Time     `orm:"column(fecha_generado);type(timestamp with time zone)"`
+	Id                int           `orm:"column(id);pk;auto"`
+	HojaHistoriaId    *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
+	FechaGenerado     time.Time     `orm:"column(fecha_generado);type(timestamp with time zone)"`
+	FechaCreacion     string  			`orm:"column(fecha_creacion);null"`
+	FechaModificacion string  			`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *ExcusaMedica) TableName() string {
@@ -27,6 +30,8 @@ func init() {
 // AddExcusaMedica insert a new ExcusaMedica into database and returns
 // last inserted Id on success.
 func AddExcusaMedica(m *ExcusaMedica) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -126,10 +131,11 @@ func GetAllExcusaMedica(query map[string]string, fields []string, sortby []strin
 func UpdateExcusaMedicaById(m *ExcusaMedica) (err error) {
 	o := orm.NewOrm()
 	v := ExcusaMedica{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "FechaGenerado", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

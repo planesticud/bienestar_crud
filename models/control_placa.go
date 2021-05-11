@@ -7,15 +7,18 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type ControlPlaca struct {
-	Id             int           `orm:"column(id);pk;auto"`
-	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
-	IndiceAnterior int           `orm:"column(indice_anterior)"`
-	IndiceActual   int           `orm:"column(indice_actual)"`
-	Vestibulares   string        `orm:"column(vestibulares);type(json)"`
-	Observaciones  string        `orm:"column(observaciones)"`
+	Id                int           `orm:"column(id);pk;auto"`
+	HojaHistoriaId    *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
+	IndiceAnterior    int           `orm:"column(indice_anterior)"`
+	IndiceActual      int           `orm:"column(indice_actual)"`
+	Diagrama          string        `orm:"column(diagrama);type(json)"`
+	Observaciones     string        `orm:"column(observaciones)"`
+	FechaCreacion     string  			`orm:"column(fecha_creacion);null"`
+	FechaModificacion string  			`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *ControlPlaca) TableName() string {
@@ -29,6 +32,8 @@ func init() {
 // AddControlPlaca insert a new ControlPlaca into database and returns
 // last inserted Id on success.
 func AddControlPlaca(m *ControlPlaca) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -128,10 +133,11 @@ func GetAllControlPlaca(query map[string]string, fields []string, sortby []strin
 func UpdateControlPlacaById(m *ControlPlaca) (err error) {
 	o := orm.NewOrm()
 	v := ControlPlaca{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "IndiceAnterior", "IndiceActual", "Diagrama", "Observaciones", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

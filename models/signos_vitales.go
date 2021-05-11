@@ -7,20 +7,25 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type SignosVitales struct {
 	Id                     int           `orm:"column(id);pk;auto"`
 	HojaHistoriaId         *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
-	Temperatura            string        `orm:"column(temperatura);null"`
-	Tension                string        `orm:"column(tension);null"`
-	Estatura               string        `orm:"column(estatura);null"`
-	Peso                   string        `orm:"column(peso);null"`
-	Imc                    string        `orm:"column(imc);null"`
-	Saturacion             string        `orm:"column(saturacion);null"`
-	FrecuenciaCardiaca     string        `orm:"column(frecuencia_cardiaca);null"`
-	FrecuenciaRespiratoria string        `orm:"column(frecuencia_respiratoria);null"`
-	PerimetroAbdominal     string        `orm:"column(perimetro_abdominal);null"`
+	Temperatura            float64       `orm:"column(temperatura);null"`
+	TensionSistolica       int           `orm:"column(tension_sistolica);null"`
+	TensionDiastolica      int           `orm:"column(tension_diastolica);null"`
+	TensionMedia           float64       `orm:"column(tension_media);null"`
+	Estatura               float64       `orm:"column(estatura);null"`
+	Peso                   float64       `orm:"column(peso);null"`
+	Imc                    float64       `orm:"column(imc);null"`
+	Saturacion             int           `orm:"column(saturacion);null"`
+	FrecuenciaCardiaca     int           `orm:"column(frecuencia_cardiaca);null"`
+	FrecuenciaRespiratoria int           `orm:"column(frecuencia_respiratoria);null"`
+	PerimetroAbdominal     float64       `orm:"column(perimetro_abdominal);null"`
+	FechaCreacion     		 string  			 `orm:"column(fecha_creacion);null"`
+	FechaModificacion 		 string  			 `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *SignosVitales) TableName() string {
@@ -34,6 +39,8 @@ func init() {
 // AddSignosVitales insert a new SignosVitales into database and returns
 // last inserted Id on success.
 func AddSignosVitales(m *SignosVitales) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -133,10 +140,11 @@ func GetAllSignosVitales(query map[string]string, fields []string, sortby []stri
 func UpdateSignosVitalesById(m *SignosVitales) (err error) {
 	o := orm.NewOrm()
 	v := SignosVitales{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "Temperatura", "TensionSistolica", "TensionDiastolica", "TensionMedia", "Estatura", "Peso", "Imc", "Saturacion", "FrecuenciaCardiaca", "FrecuenciaRespiratoria", "PerimetroAbdominal", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

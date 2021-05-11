@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type SoporteAval struct {
@@ -14,6 +15,8 @@ type SoporteAval struct {
 	SolicitudServicioId *SolicitudServicio `orm:"column(solicitud_servicio_id);rel(fk)"`
 	DocumentoId         int                `orm:"column(documento_id)"`
 	MotivoAvalId        *MotivoAval        `orm:"column(motivo_aval_id);rel(fk)"`
+	FechaCreacion     	string  					 `orm:"column(fecha_creacion);null"`
+	FechaModificacion 	string  					 `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *SoporteAval) TableName() string {
@@ -27,6 +30,8 @@ func init() {
 // AddSoporteAval insert a new SoporteAval into database and returns
 // last inserted Id on success.
 func AddSoporteAval(m *SoporteAval) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -126,10 +131,11 @@ func GetAllSoporteAval(query map[string]string, fields []string, sortby []string
 func UpdateSoporteAvalById(m *SoporteAval) (err error) {
 	o := orm.NewOrm()
 	v := SoporteAval{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "SolicitudServicioId", "DocumentoId", "MotivoAvalId", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

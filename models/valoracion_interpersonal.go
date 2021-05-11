@@ -7,21 +7,24 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type ValoracionInterpersonal struct {
-	Id             int           `orm:"column(id);pk;auto"`
-	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
-	Autoridad      string        `orm:"column(autoridad)"`
-	Pares          string        `orm:"column(pares)"`
-	Pareja         string        `orm:"column(pareja)"`
-	Relaciones     bool          `orm:"column(relaciones)"`
-	Satisfaccion   string        `orm:"column(satisfaccion)"`
-	Proteccion     string        `orm:"column(proteccion)"`
-	Orientacion    string        `orm:"column(orientacion)"`
-	Judiciales     string        `orm:"column(judiciales)"`
-	Economicos     string        `orm:"column(economicos)"`
-	Drogas         string        `orm:"column(drogas)"`
+	Id                int           `orm:"column(id);pk;auto"`
+	HojaHistoriaId    *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
+	Autoridad         string        `orm:"column(autoridad)"`
+	Pares             string        `orm:"column(pares)"`
+	Pareja            string        `orm:"column(pareja)"`
+	Relaciones        bool          `orm:"column(relaciones)"`
+	Satisfaccion      string        `orm:"column(satisfaccion)"`
+	Proteccion        string        `orm:"column(proteccion)"`
+	Orientacion       string        `orm:"column(orientacion)"`
+	Judiciales        string        `orm:"column(judiciales)"`
+	Economicos        string        `orm:"column(economicos)"`
+	Drogas            string        `orm:"column(drogas)"`
+	FechaCreacion     string  			`orm:"column(fecha_creacion);null"`
+	FechaModificacion string  			`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *ValoracionInterpersonal) TableName() string {
@@ -35,6 +38,8 @@ func init() {
 // AddValoracionInterpersonal insert a new ValoracionInterpersonal into database and returns
 // last inserted Id on success.
 func AddValoracionInterpersonal(m *ValoracionInterpersonal) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -134,10 +139,11 @@ func GetAllValoracionInterpersonal(query map[string]string, fields []string, sor
 func UpdateValoracionInterpersonalById(m *ValoracionInterpersonal) (err error) {
 	o := orm.NewOrm()
 	v := ValoracionInterpersonal{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "Autoridad", "Pares", "Pareja", "Relaciones", "Satisfaccion", "Proteccion", "Orientacion", "Judiciales", "Economicos", "Drogas", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

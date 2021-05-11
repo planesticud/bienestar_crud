@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type Anamnesis struct {
@@ -29,11 +30,13 @@ type Anamnesis struct {
 	Cepillado              int              `orm:"column(cepillado)"`
 	Seda                   int              `orm:"column(seda)"`
 	Enjuague               int              `orm:"column(enjuague)"`
-	Dulces                 string           `orm:"column(dulces)"`
-	Fuma                   string           `orm:"column(fuma)"`
-	Chicle                 string           `orm:"column(chicle)"`
+	Dulces                 bool             `orm:"column(dulces)"`
+	Fuma                   bool             `orm:"column(fuma)"`
+	Chicle                 bool             `orm:"column(chicle)"`
 	Otras                  string           `orm:"column(otras);null"`
 	UltimaVisita           time.Time        `orm:"column(ultima_visita);type(date)"`
+	FechaCreacion     		 string 				  `orm:"column(fecha_creacion);null"`
+	FechaModificacion 		 string  					`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *Anamnesis) TableName() string {
@@ -47,6 +50,8 @@ func init() {
 // AddAnamnesis insert a new Anamnesis into database and returns
 // last inserted Id on success.
 func AddAnamnesis(m *Anamnesis) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -146,10 +151,11 @@ func GetAllAnamnesis(query map[string]string, fields []string, sortby []string, 
 func UpdateAnamnesisById(m *Anamnesis) (err error) {
 	o := orm.NewOrm()
 	v := Anamnesis{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HistoriaClinicaId", "Tratamiento", "Medicamentos", "Alergias", "Hemorragias", "Irradiaciones", "Sinusitis", "EnfermedadRespiratoria", "Cardiopatias", "Diabetes", "FiebreReumatica", "Hepatitis", "Hipertension", "AntecedenteFamiliar", "Cepillado", "Seda", "Enjuague", "Dulces", "Fuma", "Chicle", "Otras", "UltimaVisita", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

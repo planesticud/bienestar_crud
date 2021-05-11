@@ -143,7 +143,7 @@ func UpdatePersonaById(m *Persona) (err error) {
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "PrimerNombre", "SegundoNombre", "PrimerApellido", "SegundoApellido", "TipoIdentificacion", "NumeroIdentificacion", "FechaNacimiento", "Genero", "Telefono", "Correo", "Eps", "FacultadId", "DependenciaId", "Estamento", "CodigoEstudiantil", "EstadoCondor"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

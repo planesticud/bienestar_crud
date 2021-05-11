@@ -7,14 +7,17 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type ComportamientoConsulta struct {
-	Id             int           `orm:"column(id);pk;auto"`
-	HojaHistoriaId *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
-	Problematica   string        `orm:"column(problematica)"`
-	Afrontamiento  string        `orm:"column(afrontamiento)"`
-	Comportamiento string        `orm:"column(comportamiento)"`
+	Id                int           `orm:"column(id);pk;auto"`
+	HojaHistoriaId    *HojaHistoria `orm:"column(hoja_historia_id);rel(fk)"`
+	Problematica      string        `orm:"column(problematica)"`
+	Afrontamiento     string        `orm:"column(afrontamiento)"`
+	Comportamiento    string        `orm:"column(comportamiento)"`
+	FechaCreacion     string  			`orm:"column(fecha_creacion);null"`
+	FechaModificacion string  			`orm:"column(fecha_modificacion);null"`
 }
 
 func (t *ComportamientoConsulta) TableName() string {
@@ -28,6 +31,8 @@ func init() {
 // AddComportamientoConsulta insert a new ComportamientoConsulta into database and returns
 // last inserted Id on success.
 func AddComportamientoConsulta(m *ComportamientoConsulta) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -127,10 +132,11 @@ func GetAllComportamientoConsulta(query map[string]string, fields []string, sort
 func UpdateComportamientoConsultaById(m *ComportamientoConsulta) (err error) {
 	o := orm.NewOrm()
 	v := ComportamientoConsulta{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "HojaHistoriaId", "Problematica", "Afrontamiento", "Comportamiento", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

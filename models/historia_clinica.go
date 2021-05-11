@@ -7,11 +7,14 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type HistoriaClinica struct {
-	Id        int      `orm:"column(id);pk;auto"`
-	PersonaId *Persona `orm:"column(persona_id);rel(fk)"`
+	Id                int    `orm:"column(id);pk;auto"`
+	PersonaId         int    `orm:"column(persona_id)"`
+	FechaCreacion     string `orm:"column(fecha_creacion);null"`
+	FechaModificacion string `orm:"column(fecha_modificacion);null"`
 }
 
 func (t *HistoriaClinica) TableName() string {
@@ -25,6 +28,8 @@ func init() {
 // AddHistoriaClinica insert a new HistoriaClinica into database and returns
 // last inserted Id on success.
 func AddHistoriaClinica(m *HistoriaClinica) (id int64, err error) {
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -124,10 +129,11 @@ func GetAllHistoriaClinica(query map[string]string, fields []string, sortby []st
 func UpdateHistoriaClinicaById(m *HistoriaClinica) (err error) {
 	o := orm.NewOrm()
 	v := HistoriaClinica{Id: m.Id}
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Update(m); err == nil {
+		if num, err = o.Update(m, "PersonaId", "FechaModificacion"); err == nil {
 			fmt.Println("Number of records updated in database:", num)
 		}
 	}

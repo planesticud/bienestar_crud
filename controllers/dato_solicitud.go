@@ -30,7 +30,7 @@ func (c *DatoSolicitudController) URLMapping() {
 // @Description create DatoSolicitud
 // @Param	body		body 	models.DatoSolicitud	true		"body for DatoSolicitud content"
 // @Success 201 {int} models.DatoSolicitud
-// @Failure 400 the request contains incorrect syntax
+// @Failure 403 body is empty
 // @router / [post]
 func (c *DatoSolicitudController) Post() {
 	var v models.DatoSolicitud
