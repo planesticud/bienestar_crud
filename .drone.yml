@@ -63,8 +63,7 @@ steps:
         <b>Autor: </b>{{commit.author}} <code>&#128526 </code>
       {{else}}
         ❌ <a href="{{build.link}}">FAILURE</a> <b>Build #{{build.number}}</b>
-        <b>type: </b><code>{{ build.event }}</co
-de>
+        <b>type: </b><code>{{ build.event }}</code>
         <b>Repo: </b><code>{{repo.name}}</code>
         <b>Branch: </b><code>{{commit.branch}}</code>
         <b>Commit: </b><a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
